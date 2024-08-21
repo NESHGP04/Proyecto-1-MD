@@ -17,6 +17,27 @@ def obtener_conjunto():
         else:
             print("Entrada inválida. Solo se permiten letras (A-Z) y dígitos (0-9). Intente de nuevo.")
 
+def ingresar_conjuntos():
+    conjuntos = []
+    while True:
+        conjunto = obtener_conjunto()
+        if not conjunto:
+            print("Conjunto vacío no se agregará.")
+        else:
+            conjuntos.append(conjunto)
+            print(f"Conjunto {len(conjuntos)} agregado: {conjunto}")
+        
+        continuar = input("¿Desea ingresar otro conjunto? (s/n): ").lower()
+        if continuar != 's':
+            break
+    
+    return conjuntos
+
+def mostrar_conjuntos(conjuntos): #SOLO para ver conjuntos con índice
+    print("\nConjuntos ingresados:")
+    for i, conjunto in enumerate(conjuntos, start=1):
+        print(f"Conjunto {i}: {conjunto}")
+
 def complemento(conjunto, universo):
     complemento = []
     # Verificar si todos los elementos del conjunto están en el universo
@@ -32,13 +53,15 @@ def complemento(conjunto, universo):
     return complemento
 
 def union(conjunto1, conjunto2):
-    union = conjunto1[:]
+    union = conjunto1[:]  # Crear una copia de conjunto1
+    
     # Agregar los elementos de conjunto2 que no están en conjunto1
     for elemento in conjunto2:
         if elemento not in union:
             union.append(elemento)
     
     return union
+
 
 def interseccion(conjunto1, conjunto2):
     interseccion = []
@@ -49,46 +72,91 @@ def interseccion(conjunto1, conjunto2):
     
     return interseccion
 
-print("=== PROYECTO 1 ===")
+def diferencia(conjunto1, conjunto2):
+    diferencia = []
+    # Agregar elementos de conjunto1 que no están en conjunto2
+    for elemento in conjunto1:
+        if elemento not in conjunto2:
+            diferencia.append(elemento)
+    
+    return diferencia
+
+def difSimetrica(conjunto1, conjunto2):
+    dif_simetrica = []
+    
+    # Agregar elementos que están en conjunto1 pero no en conjunto2
+    for elemento in conjunto1:
+        if elemento not in conjunto2:
+            dif_simetrica.append(elemento)
+    
+    # Agregar elementos que están en conjunto2 pero no en conjunto1
+    for elemento in conjunto2:
+        if elemento not in conjunto1:
+            dif_simetrica.append(elemento)
+    
+    return dif_simetrica
+
+
+def realizar_operaciones(conjuntos, universo):
+    while True:
+        if len(conjuntos) < 2:
+            print("Debe ingresar al menos dos conjuntos para realizar operaciones.")
+            break
+        
+        print("\nSeleccione la operación:\n1. Complemento\n2. Unión\n3. Intersección\n4. Diferencia \n5. Diferencia simétrica")
+        operacion = int(input("Ingrese su opción: "))
+        
+        if operacion == 1:
+            idx = int(input(f"Seleccione el conjunto del cual quiere obtener el complemento (1-{len(conjuntos)}): ")) - 1
+            print("Complemento:", complemento(conjuntos[idx], universo))
+        
+        elif operacion == 2:
+            idx1 = int(input(f"Seleccione el primer conjunto para la unión (1-{len(conjuntos)}): ")) - 1
+            idx2 = int(input(f"Seleccione el segundo conjunto para la unión (1-{len(conjuntos)}): ")) - 1
+            print("Unión:", union(conjuntos[idx1], conjuntos[idx2]))
+        
+        elif operacion == 3:
+            idx1 = int(input(f"Seleccione el primer conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
+            idx2 = int(input(f"Seleccione el segundo conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
+            print("Intersección:", interseccion(conjuntos[idx1], conjuntos[idx2]))
+        
+        elif operacion == 4:
+            idx1 = int(input(f"Seleccione el primer conjunto para la diferencia (1-{len(conjuntos)}): ")) - 1
+            idx2 = int(input(f"Seleccione el segundo conjunto para la diferencia (1-{len(conjuntos)}): ")) - 1
+            print("Diferencia:", diferencia(conjuntos[idx1], conjuntos[idx2]))
+
+        elif operacion == 5:
+            idx1 = int(input(f"Seleccione el primer conjunto para la diferencia simétrica (1-{len(conjuntos)}): ")) - 1
+            idx2 = int(input(f"Seleccione el segundo conjunto para la diferencia simétrica (1-{len(conjuntos)}): ")) - 1
+            print("Diferencia Simétrica:", difSimetrica(conjuntos[idx1], conjuntos[idx2]))
+        
+        continuar = input("¿Desea realizar otra operación? (s/n): ").lower()
+        if continuar != 's':
+            break
+
+
+print("\n=== PROYECTO 1 MATE DISCRETA ===")
 
 salir = True
-while salir:
-    universo = [str(i) for i in range(10)] + [chr(i) for i in range(65, 91)]
-    print("Universo definido:", universo)
+conjuntos = []
+universo = [str(i) for i in range(10)] + [chr(i) for i in range(65, 91)]
 
-    opc = int(input("\nMENU \n1. Construir conjuntos \n2. Operar conjuntos \n3.Finalizar \nIngrese su opción: "))
+while salir:
+    print("\nUniverso definido: ", universo)
+
+    opc = int(input("\nMENU \n1. Construir conjuntos \n2. Operar conjuntos \n3. Finalizar \nIngrese su opción: "))
     
     if opc == 1:
         print("\nConstruir conjuntos")
-        conjuntos = obtener_conjunto()
-        print("Conjunto ingresado:", conjuntos)
-
+        conjunto = obtener_conjunto()
+        if conjunto:
+            conjuntos.append(conjunto)
+            print("Conjunto ingresado:", conjunto)
     
     elif opc == 2:
         print("\nOperar conjuntos")
-        if len(conjuntos) < 2:
-            print("Debe ingresar al menos dos conjuntos para realizar operaciones.")
-        else:
-            print("Seleccione la operación:\n1. Complemento\n2. Unión\n3. Intersección")
-            operacion = int(input("Ingrese su opción: "))
-            
-            if operacion == 1:
-                idx = int(input(f"Seleccione el conjunto del cual quiere obtener el complemento (1-{len(conjuntos)}): ")) - 1
-                print("Complemento:", complemento(conjuntos[idx], universo))
-            
-            elif operacion == 2:
-                idx1 = int(input(f"Seleccione el primer conjunto para la unión (1-{len(conjuntos)}): ")) - 1
-                idx2 = int(input(f"Seleccione el segundo conjunto para la unión (1-{len(conjuntos)}): ")) - 1
-                print("Unión:", union(conjuntos[idx1], conjuntos[idx2]))
-            
-            elif operacion == 3:
-                idx1 = int(input(f"Seleccione el primer conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
-                idx2 = int(input(f"Seleccione el segundo conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
-                print("Intersección:", interseccion(conjuntos[idx1], conjuntos[idx2]))
-    
-    
+        realizar_operaciones(conjuntos, universo)
     
     elif opc == 3:
         print("\nHa salido del programa!")
         salir = False
-    
