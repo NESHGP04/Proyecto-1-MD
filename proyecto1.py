@@ -3,9 +3,16 @@
     Camila Richter 23183
     Marinés García 23391
 '''
-def obtener_conjunto():
+
+def obtener_conjunto(vacio):
+    
+
     while True:
-        entrada = input("Ingrese los elementos del conjunto (letras A-Z y dígitos 0-9), separados por comas: ").upper()
+        entrada = input("Ingrese los elementos del conjunto (letras A-Z y dígitos 0-9), separados por comas (deje vacío para un conjunto vacío): ").upper()
+        
+        if not entrada.strip():
+            return set(vacio)  # Retornar un conjunto vacío
+        
         elementos = [e.strip() for e in entrada.split(",")]
         
         # Filtra los elementos válidos
@@ -17,10 +24,12 @@ def obtener_conjunto():
         else:
             print("Entrada inválida. Solo se permiten letras (A-Z) y dígitos (0-9). Intente de nuevo.")
 
+
 def ingresar_conjuntos():
     conjuntos = []
+    vacio = "Ø"
     while True:
-        conjunto = obtener_conjunto()
+        conjunto = obtener_conjunto(vacio)
         if not conjunto:
             print("Conjunto vacío no se agregará.")
         else:
@@ -53,12 +62,11 @@ def complemento(conjunto, universo):
     return complemento
 
 def union(conjunto1, conjunto2):
-    union = conjunto1[:]  # Crear una copia de conjunto1
+    union = set(conjunto1)
     
-    # Agregar los elementos de conjunto2 que no están en conjunto1
     for elemento in conjunto2:
         if elemento not in union:
-            union.append(elemento)
+            union.add(elemento)
     
     return union
 
@@ -107,30 +115,30 @@ def realizar_operaciones(conjuntos, universo):
         operacion = int(input("Ingrese su opción: "))
         
         if operacion == 1:
-            idx = int(input(f"Seleccione el conjunto del cual quiere obtener el complemento (1-{len(conjuntos)}): ")) - 1
-            print("Complemento:", complemento(conjuntos[idx], universo))
+            idx = int(input(f"\nSeleccione el conjunto del cual quiere obtener el complemento (1-{len(conjuntos)}): ")) - 1
+            print("\nComplemento:", complemento(conjuntos[idx], universo))
         
         elif operacion == 2:
-            idx1 = int(input(f"Seleccione el primer conjunto para la unión (1-{len(conjuntos)}): ")) - 1
+            idx1 = int(input(f"\nSeleccione el primer conjunto para la unión (1-{len(conjuntos)}): ")) - 1
             idx2 = int(input(f"Seleccione el segundo conjunto para la unión (1-{len(conjuntos)}): ")) - 1
-            print("Unión:", union(conjuntos[idx1], conjuntos[idx2]))
+            print("\nUnión:", union(conjuntos[idx1], conjuntos[idx2]))
         
         elif operacion == 3:
-            idx1 = int(input(f"Seleccione el primer conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
+            idx1 = int(input(f"\nSeleccione el primer conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
             idx2 = int(input(f"Seleccione el segundo conjunto para la intersección (1-{len(conjuntos)}): ")) - 1
-            print("Intersección:", interseccion(conjuntos[idx1], conjuntos[idx2]))
+            print("\nIntersección:", interseccion(conjuntos[idx1], conjuntos[idx2]))
         
         elif operacion == 4:
-            idx1 = int(input(f"Seleccione el primer conjunto para la diferencia (1-{len(conjuntos)}): ")) - 1
+            idx1 = int(input(f"\nSeleccione el primer conjunto para la diferencia (1-{len(conjuntos)}): ")) - 1
             idx2 = int(input(f"Seleccione el segundo conjunto para la diferencia (1-{len(conjuntos)}): ")) - 1
-            print("Diferencia:", diferencia(conjuntos[idx1], conjuntos[idx2]))
+            print("\nDiferencia:", diferencia(conjuntos[idx1], conjuntos[idx2]))
 
         elif operacion == 5:
-            idx1 = int(input(f"Seleccione el primer conjunto para la diferencia simétrica (1-{len(conjuntos)}): ")) - 1
+            idx1 = int(input(f"\nSeleccione el primer conjunto para la diferencia simétrica (1-{len(conjuntos)}): ")) - 1
             idx2 = int(input(f"Seleccione el segundo conjunto para la diferencia simétrica (1-{len(conjuntos)}): ")) - 1
-            print("Diferencia Simétrica:", difSimetrica(conjuntos[idx1], conjuntos[idx2]))
+            print("\nDiferencia Simétrica:", difSimetrica(conjuntos[idx1], conjuntos[idx2]))
         
-        continuar = input("¿Desea realizar otra operación? (s/n): ").lower()
+        continuar = input("\n¿Desea realizar otra operación? (s/n): ").lower()
         if continuar != 's':
             break
 
@@ -139,16 +147,20 @@ print("\n=== PROYECTO 1 MATE DISCRETA ===")
 
 salir = True
 conjuntos = []
-universo = [str(i) for i in range(10)] + [chr(i) for i in range(65, 91)]
+vacio = "Ø"
+universo = [str(i) for i in range(10)] + [chr(i) for i in range(65, 91)] + [vacio]
+
+print("\nUniverso definido:", universo)
+
 
 while salir:
-    print("\nUniverso definido: ", universo)
+    
 
     opc = int(input("\nMENU \n1. Construir conjuntos \n2. Operar conjuntos \n3. Finalizar \nIngrese su opción: "))
     
     if opc == 1:
         print("\nConstruir conjuntos")
-        conjunto = obtener_conjunto()
+        conjunto = obtener_conjunto(vacio)
         if conjunto:
             conjuntos.append(conjunto)
             print("Conjunto ingresado:", conjunto)
